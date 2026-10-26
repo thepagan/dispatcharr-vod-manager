@@ -317,8 +317,7 @@ class PipelineMixin:
         ).values_list(id_field, "id"):
             current.setdefault(content_id, set()).add(relation_id)
         changed = self.store.changed_content_ids(content_type, current)
-        for content_id in changed:
-            self.store.requeue(content_type, content_id)
+        self.store.requeue_many(content_type, changed)
         return len(current), len(changed)
 
     def _scan_movies(self, settings):
